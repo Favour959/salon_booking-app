@@ -1,0 +1,43 @@
+{% extends 'appointments/base.html' %}
+{% block title %}Services — GlowUp Salon{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <p class="section-tag">✦ What We Offer</p>
+    <h2>Our Hair Services</h2>
+  </div>
+  <div class="row g-4">
+    {% for service in services %}
+    <div class="col-sm-6 col-lg-4">
+      <div class="salon-card card h-100">
+        {% if service.image %}
+          <img src="{{ service.image.url }}" class="card-img-top"
+               alt="{{ service.name }}" style="height:220px;object-fit:cover;">
+        {% else %}
+          <div style="height:220px;
+                      background:linear-gradient(135deg,var(--plum),var(--rose));
+                      display:flex;align-items:center;
+                      justify-content:center;font-size:4rem;">✂️</div>
+        {% endif %}
+        <div class="card-body p-4 d-flex flex-column">
+          <h4 class="card-title">{{ service.name }}</h4>
+          <p class="text-muted flex-grow-1">{{ service.description }}</p>
+          <hr>
+          <div class="d-flex justify-content-between mb-3">
+            <span><strong>Price:</strong>
+              <span style="color:var(--rose);">₦{{ service.price }}</span>
+            </span>
+            <span class="text-muted small">⏱ {{ service.duration_minutes }} min</span>
+          </div>
+          <a href="{% url 'service_detail' service.pk %}"
+             class="btn btn-salon w-100">Select & Book</a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-center text-muted">No services available yet.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

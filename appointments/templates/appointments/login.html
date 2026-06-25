@@ -1,0 +1,51 @@
+{% extends 'appointments/base.html' %}
+{% block title %}Login — Fav_hie's GlowUp Salon{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5 col-lg-4">
+      <div class="salon-card card p-4 p-md-5">
+        <div class="text-center mb-4">
+          <h2>Welcome Back</h2>
+          <p class="text-muted">Login to your account</p>
+        </div>
+        <form method="POST" novalidate>
+          {% csrf_token %}
+          {% for field in form %}
+          <div class="mb-3">
+            <label class="form-label fw-500 small text-uppercase"
+                   style="letter-spacing:.5px;color:var(--muted);">
+              {{ field.label }}
+            </label>
+            {{ field }}
+            {% if field.errors %}
+              {% for error in field.errors %}
+                <div class="text-danger small mt-1">{{ error }}</div>
+              {% endfor %}
+            {% endif %}
+          </div>
+          {% endfor %}
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger small">
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
+          <button type="submit" class="btn btn-salon w-100 py-2 mt-2">
+            Login
+          </button>
+        </form>
+        <p class="text-center small mt-3 mb-0">
+          <a href="{% url 'password_reset' %}" style="color:var(--rose);">
+            Forgot your password?
+          </a>
+        </p>
+        <p class="text-center text-muted small mt-2 mb-0">
+          No account?
+          <a href="{% url 'register' %}" style="color:var(--rose);">Register here</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

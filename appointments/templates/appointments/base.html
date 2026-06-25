@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Fav_hie's GlowUp Salon{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --rose: #C06C84;
+      --plum: #6C3483;
+      --dark: #1a0a12;
+      --cream: #fff9f5;
+      --blush: #fdf0f5;
+      --muted: #8a7080;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+    }
+    h1, h2, h3, h4, h5 {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background: linear-gradient(135deg, #1a0a12, #2d0f22) !important;
+      padding: 1rem 2rem;
+    }
+    .navbar-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: #fff !important;
+    }
+    .navbar-brand span { color: var(--rose); }
+    .nav-link {
+      color: rgba(255,255,255,0.75) !important;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: #fff !important; }
+    .navbar-toggler { border-color: rgba(255,255,255,0.3); }
+    .navbar-toggler-icon {
+      filter: invert(1);
+    }
+
+    /* ── BUTTONS ── */
+    .btn-salon {
+      background: linear-gradient(135deg, var(--rose), var(--plum));
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 0.6rem 1.5rem;
+      font-weight: 500;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-salon:hover {
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(192,108,132,0.35);
+    }
+    .btn-outline-salon {
+      background: transparent;
+      color: var(--rose);
+      border: 1.5px solid var(--rose);
+      border-radius: 50px;
+      padding: 0.6rem 1.5rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .btn-outline-salon:hover {
+      background: var(--rose);
+      color: #fff;
+    }
+
+    /* ── CARDS ── */
+    .salon-card {
+      border: none;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(192,108,132,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      overflow: hidden;
+    }
+    .salon-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(192,108,132,0.15);
+    }
+
+    /* ── SECTION LABELS ── */
+    .section-tag {
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--rose);
+      font-weight: 600;
+    }
+
+    /* ── MESSAGES ── */
+    .messages-container { padding: 0 1rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #1a0a12;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.875rem;
+      margin-top: 4rem;
+    }
+    footer strong { color: var(--rose); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero-title { font-size: 2.25rem !important; }
+      .hero-stats { gap: 1.5rem !important; }
+    }
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'home' %}">Fav_hie's <span>GlowUp</span> Salon</a>
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navMenu"
+            aria-controls="navMenu" aria-expanded="false">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'services' %}">Services</a>
+        </li>
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'my_appointments' %}">My Appointments</a>
+          </li>
+          {% if user.staff %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'staff_dashboard' %}">Dashboard</a>
+            </li>
+          {% endif %}
+          <li class="nav-item">
+            <form method="POST" action="{% url 'logout' %}" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="nav-link btn btn-link p-0"
+                      style="text-decoration:none;">
+                Logout
+              </button>
+            </form>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </li>
+          <li class="nav-item ms-lg-2">
+            <a href="{% url 'register' %}" class="btn btn-salon btn-sm">Register</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="messages-container mt-3">
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show mx-auto"
+         style="max-width:700px;" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+</div>
+
+{% block content %}{% endblock %}
+
+<footer>
+  <strong>Fav_hie's GlowUp Salon</strong> &nbsp;·&nbsp; Made with Django
+  &nbsp;·&nbsp; © 2026 All rights reserved
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Auto-dismiss flash messages after a few seconds.
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.messages-container .alert').forEach(function (el) {
+      setTimeout(function () {
+        bootstrap.Alert.getOrCreateInstance(el).close();
+      }, 3000);
+    });
+  });
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,203 @@
+{% extends 'appointments/base.html' %}
+{% block title %}Fav_hie's GlowUp Salon — Home{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<div style="background:linear-gradient(135deg,#1a0a12 0%,#3d1230 60%,#1a0a12 100%);
+            padding:5rem 1.5rem; text-align:center;">
+  <p class="section-tag mb-2" style="color:var(--rose);">✦ Premium Hair Studio</p>
+  <h1 class="hero-title" style="font-size:3.2rem;color:#fff;line-height:1.15;margin-bottom:1rem;">
+    Where Your <span style="color:var(--rose);">Best Hair</span><br>Comes to Life
+  </h1>
+  <p style="color:rgba(255,255,255,0.6);font-size:1.1rem;max-width:480px;
+            margin:0 auto 2.5rem;line-height:1.7;">
+    Book appointments with our expert stylists in seconds.
+    Box braids, weaves, natural styles and more.
+  </p>
+  <div class="d-flex gap-3 justify-content-center flex-wrap">
+    <a href="{% url 'services' %}" class="btn btn-salon px-4 py-2">Browse Services</a>
+    {% if not user.is_authenticated %}
+      <a href="{% url 'register' %}" class="btn btn-outline-light px-4 py-2"
+         style="border-radius:50px;">Create Account</a>
+    {% endif %}
+  </div>
+  <div class="d-flex gap-5 justify-content-center mt-5 hero-stats">
+    <div>
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;color:#fff;">3+</div>
+      <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);
+                  letter-spacing:1.5px;text-transform:uppercase;">Expert Stylists</div>
+    </div>
+    <div>
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;color:#fff;">4.9 ★</div>
+      <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);
+                  letter-spacing:1.5px;text-transform:uppercase;">Average Rating</div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <p class="section-tag">✦ What We Offer</p>
+    <h2>Our Hair Services</h2>
+    <p class="text-muted mt-2">
+      From protective styles to relaxers — everything to keep your hair healthy and beautiful.
+    </p>
+  </div>
+  <div class="row g-4">
+    {% for service in services %}
+    <div class="col-sm-6 col-lg-3">
+      <div class="salon-card card h-100">
+        {% if service.image %}
+          <img src="{{ service.image.url }}" class="card-img-top"
+               alt="{{ service.name }}" style="height:200px;object-fit:cover;">
+        {% else %}
+          <div style="height:200px;
+                      background:linear-gradient(135deg,var(--plum),var(--rose));
+                      display:flex;align-items:center;
+                      justify-content:center;font-size:3.5rem;">
+            ✂️
+          </div>
+        {% endif %}
+        <div class="card-body d-flex flex-column p-4">
+          <h5 class="card-title">{{ service.name }}</h5>
+          <p class="card-text text-muted small flex-grow-1">
+            {{ service.description|truncatewords:15 }}
+          </p>
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <span style="font-family:'Playfair Display',serif;
+                         font-size:1.2rem;color:var(--rose);">
+              ₦{{ service.price }}
+            </span>
+            <span class="badge rounded-pill"
+                  style="background:var(--blush);color:var(--muted);font-weight:400;">
+              ⏱ {{ service.duration_minutes }} min
+            </span>
+          </div>
+          <a href="{% url 'service_detail' service.pk %}"
+             class="btn btn-salon w-100 mt-3">Book Now</a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center text-muted py-5">
+      <p>No services yet. Check back soon!</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- STAFF -->
+<div style="background:linear-gradient(135deg,#1a0a12,#2d0f22);padding:5rem 1.5rem;">
+  <div class="container">
+    <div class="text-center mb-5">
+      <p class="section-tag">✦ The Team</p>
+      <h2 style="color:#fff;">Meet Our Stylists</h2>
+      <p style="color:rgba(255,255,255,0.5);">
+        Experienced professionals passionate about making you look amazing.
+      </p>
+    </div>
+    <div class="row g-4 justify-content-center">
+      {% for staff in staff_members %}
+      <div class="col-sm-6 col-lg-3">
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
+                    border-radius:20px;padding:2rem;text-align:center;">
+          {% if staff.profile_photo %}
+            <img src="{{ staff.profile_photo.url }}"
+                 class="rounded-circle mb-3"
+                 style="width:90px;height:90px;object-fit:cover;
+                        border:3px solid rgba(192,108,132,0.4);"
+                 alt="{{ staff }}">
+          {% else %}
+            <div style="width:90px;height:90px;border-radius:50%;
+                        background:linear-gradient(135deg,var(--rose),var(--plum));
+                        display:flex;align-items:center;justify-content:center;
+                        font-size:2.5rem;margin:0 auto 1rem;
+                        border:3px solid rgba(192,108,132,0.3);">
+              👩
+            </div>
+          {% endif %}
+          <h5 style="color:#fff;font-family:'Playfair Display',serif;">{{ staff }}</h5>
+          <p style="color:rgba(255,255,255,0.45);font-size:0.85rem;line-height:1.6;">
+            {{ staff.bio|truncatewords:12 }}
+          </p>
+          <div class="d-flex flex-wrap gap-1 justify-content-center mt-2">
+            {% for specialty in staff.specialties.all %}
+              <span style="background:rgba(192,108,132,0.15);color:var(--rose);
+                           border:1px solid rgba(192,108,132,0.2);
+                           border-radius:50px;padding:0.2rem 0.7rem;font-size:0.75rem;">
+                {{ specialty.name }}
+              </span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- REVIEWS -->
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <p class="section-tag">✦ Kind Words</p>
+    <h2>What Our Clients Say</h2>
+    <p class="text-muted mt-2">
+      Real reviews from real glow-ups.
+    </p>
+  </div>
+  <div class="row g-4 justify-content-center">
+
+    <div class="col-md-6 col-lg-5">
+      <div class="salon-card card h-100 p-4">
+        <div style="color:var(--rose);font-size:1.1rem;">★★★★★</div>
+        <p class="mt-3 mb-4" style="font-style:italic;line-height:1.7;">
+          "I got knotless braids here and they came out flawless. The stylist
+          was so gentle and took her time. Booking online was super easy too —
+          I'll definitely be back!"
+        </p>
+        <div class="d-flex align-items-center gap-3 mt-auto">
+          <div style="width:48px;height:48px;border-radius:50%;
+                      background:linear-gradient(135deg,var(--rose),var(--plum));
+                      display:flex;align-items:center;justify-content:center;
+                      color:#fff;font-family:'Playfair Display',serif;
+                      font-size:1.2rem;flex-shrink:0;">
+            A
+          </div>
+          <div>
+            <h6 class="mb-0">Amara O.</h6>
+            <small class="text-muted">Knotless Braids</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-5">
+      <div class="salon-card card h-100 p-4">
+        <div style="color:var(--rose);font-size:1.1rem;">★★★★★</div>
+        <p class="mt-3 mb-4" style="font-style:italic;line-height:1.7;">
+          "Best salon experience I've had in a long time. The atmosphere is
+          lovely, the team is friendly, and my weave looked amazing. Highly
+          recommend to anyone wanting a fresh new look."
+        </p>
+        <div class="d-flex align-items-center gap-3 mt-auto">
+          <div style="width:48px;height:48px;border-radius:50%;
+                      background:linear-gradient(135deg,var(--plum),var(--rose));
+                      display:flex;align-items:center;justify-content:center;
+                      color:#fff;font-family:'Playfair Display',serif;
+                      font-size:1.2rem;flex-shrink:0;">
+            C
+          </div>
+          <div>
+            <h6 class="mb-0">Chiamaka N.</h6>
+            <small class="text-muted">Weave Installation</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

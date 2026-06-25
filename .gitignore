@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.code-workspace
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Django
+db.sqlite3
+*.log
+staticfiles/
+
+# Local media uploads (re-uploaded by users; not part of the code)
+media/
+
+# Environment
+.env
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

@@ -1,0 +1,54 @@
+{% extends 'appointments/base.html' %}
+{% block title %}Staff Dashboard — GlowUp Salon{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="mb-4">
+    <p class="section-tag">✦ Staff Dashboard</p>
+    <h2>Welcome, {{ staff.user.first_name }}!</h2>
+    <p class="text-muted">Here are your upcoming appointments.</p>
+  </div>
+
+  {% if appointments %}
+  <div class="table-responsive salon-card card p-0">
+    <table class="table table-hover mb-0">
+      <thead style="background:linear-gradient(135deg,#1a0a12,#2d0f22);color:#fff;">
+        <tr>
+          <th class="p-3">Client</th>
+          <th class="p-3">Service</th>
+          <th class="p-3">Date</th>
+          <th class="p-3">Time</th>
+          <th class="p-3">Status</th>
+          <th class="p-3">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for apt in appointments %}
+        <tr>
+          <td class="p-3">{{ apt.client.get_full_name|default:apt.client.username }}</td>
+          <td class="p-3">{{ apt.service.name }}</td>
+          <td class="p-3">{{ apt.time_slot.date }}</td>
+          <td class="p-3">{{ apt.time_slot.start_time }}</td>
+          <td class="p-3">
+            <span class="badge rounded-pill
+              {% if apt.status == 'confirmed' %}bg-success
+              {% elif apt.status == 'pending' %}bg-warning text-dark
+              {% else %}bg-info{% endif %}">
+              {{ apt.get_status_display }}
+            </span>
+          </td>
+          <td class="p-3 text-muted small">
+            {{ apt.notes|default:"—" }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="text-center py-5">
+    <h4 class="text-muted">No upcoming appointments 🎉</h4>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'appointments/base.html' %}
+{% block title %}Book Appointment — GlowUp Salon{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="salon-card card p-4 p-md-5">
+        <h3 class="mb-1">Book Appointment</h3>
+        <p class="text-muted mb-4">
+          <strong>{{ service.name }}</strong> with <strong>{{ staff }}</strong>
+        </p>
+        <form method="POST" novalidate>
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label small text-uppercase fw-500"
+                   style="letter-spacing:.5px;color:var(--muted);">
+              Available Time Slot
+            </label>
+            {{ form.time_slot }}
+            {% if form.time_slot.errors %}
+              <div class="text-danger small mt-1">{{ form.time_slot.errors }}</div>
+            {% endif %}
+          </div>
+          <div class="mb-4">
+            <label class="form-label small text-uppercase fw-500"
+                   style="letter-spacing:.5px;color:var(--muted);">
+              Special Notes (optional)
+            </label>
+            {{ form.notes }}
+          </div>
+          <div class="alert small mb-4"
+               style="background:var(--blush);border:none;border-radius:12px;">
+            💰 <strong>₦{{ service.price }}</strong> &nbsp;·&nbsp;
+            ⏱ <strong>{{ service.duration_minutes }} minutes</strong>
+          </div>
+          <button type="submit" class="btn btn-salon w-100 py-2">
+            Confirm Booking
+          </button>
+          <a href="{% url 'services' %}"
+             class="btn btn-outline-secondary w-100 mt-2"
+             style="border-radius:50px;">Go Back</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
