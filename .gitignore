@@ -9,12 +9,9 @@ env/
 .venv/
 
 # Django
-db.sqlite3
 *.log
 staticfiles/
 
-# Local media uploads (re-uploaded by users; not part of the code)
-media/
 
 # Environment
 .env
