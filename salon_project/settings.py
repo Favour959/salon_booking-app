@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'anymail',
     'appointments',
 ]
 
@@ -175,12 +176,27 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Email
-# In dev, password-reset emails are printed to the console. In production,
-# set DJANGO_EMAIL_BACKEND (e.g. SMTP) and the related EMAIL_* env vars.
+# In dev, emails are printed to the console. In production we use Brevo's
+# HTTP API (via django-anymail) instead of SMTP, because Render's free tier
+# blocks all outbound SMTP ports (25/465/587). The API goes over HTTPS (443),
+# which is never blocked.
+#
+# To enable on Render, set these env vars:
+#   DJANGO_EMAIL_BACKEND = anymail.backends.brevo.EmailBackend
+#   BREVO_API_KEY        = <your Brevo API v3 key>
+#   DJANGO_DEFAULT_FROM_EMAIL = Fav_hie's GlowUp Salon <your-verified@email>
 EMAIL_BACKEND = os.environ.get(
     'DJANGO_EMAIL_BACKEND',
     'django.core.mail.backends.console.EmailBackend',
 )
+
+# Brevo (Sendinblue) HTTP API credentials for django-anymail.
+ANYMAIL = {
+    'BREVO_API_KEY': os.environ.get('BREVO_API_KEY', ''),
+}
+
+# SMTP settings — only used if DJANGO_EMAIL_BACKEND is set back to an SMTP
+# backend (e.g. on a paid host where SMTP isn't blocked).
 EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST', 'localhost')
 EMAIL_PORT = int(os.environ.get('DJANGO_EMAIL_PORT', '25'))
 EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_HOST_USER', '')
