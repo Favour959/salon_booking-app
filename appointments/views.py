@@ -7,6 +7,7 @@ from django.db import transaction
 from django.views.decorators.http import require_POST
 from .models import Service, Staff, Appointment, TimeSlot
 from .forms import ClientRegistrationForm, AppointmentForm
+from .emails import send_booking_confirmation, send_cancellation_notice
 
 
 # ── HOME ──────────────────────────────────────
@@ -128,6 +129,10 @@ def book_appointment(request, service_pk, staff_pk):
 
                     slot.is_available = False
                     slot.save(update_fields=['is_available'])
+
+                # Sent after the transaction commits so we never email about a
+                # booking that got rolled back.
+                send_booking_confirmation(appointment)
             except TimeSlot.DoesNotExist:
                 messages.error(
                     request,
@@ -178,6 +183,7 @@ def cancel_appointment(request, pk):
         appointment.time_slot.save()
         appointment.status = 'cancelled'
         appointment.save()
+        send_cancellation_notice(appointment)
         messages.warning(request, 'Your appointment has been cancelled.')
         return redirect('my_appointments')
 

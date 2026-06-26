@@ -119,6 +119,48 @@
       .hero-title { font-size: 2.25rem !important; }
       .hero-stats { gap: 1.5rem !important; }
     }
+
+    /* ── MOBILE NAV (menu is collapsed below 992px) ── */
+    @media (max-width: 991.98px) {
+      .navbar { padding: 0.75rem 1rem; }
+
+      /* Turn the dropdown into a clean panel that sits below the bar. */
+      .navbar-collapse {
+        margin-top: 0.75rem;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 14px;
+        padding: 0.5rem;
+      }
+
+      /* Big, finger-friendly tap targets with dividers between them. */
+      .navbar-nav .nav-item:not(:last-child) {
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+      .navbar-nav .nav-link {
+        padding: 0.85rem 1rem !important;
+        font-size: 1.05rem !important;
+        display: flex;
+        align-items: center;
+      }
+
+      /* Logout button matches the other links instead of looking squished. */
+      .navbar-nav form .nav-link {
+        width: 100%;
+        text-align: left;
+        justify-content: flex-start;
+      }
+
+      /* Register reads as a clear primary action, full width. */
+      .navbar-nav .btn-salon {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-top: 0.5rem;
+        padding: 0.85rem 1rem;
+        font-size: 1.05rem;
+      }
+    }
   </style>
   {% block extra_css %}{% endblock %}
 </head>
