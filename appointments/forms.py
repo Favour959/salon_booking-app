@@ -62,6 +62,17 @@ class ClientRegistrationForm(UserCreationForm):
             'placeholder': 'Confirm your password'
         })
 
+    def clean_email(self):
+        # One account per email address. Compare case-insensitively so
+        # "Me@x.com" and "me@x.com" are treated as the same.
+        email = self.cleaned_data['email']
+        if User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError(
+                'An account with this email already exists. '
+                'Try logging in or resetting your password.'
+            )
+        return email
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.first_name = self.cleaned_data['first_name']
